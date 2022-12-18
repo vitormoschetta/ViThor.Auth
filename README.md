@@ -64,6 +64,17 @@ The parameterization of these services is done in appsettings:
 }
 ```
 
+Add AuthController to the API:
+
+```csharp
+public class AuthController : AuthControllerBase<User>
+{
+    public AuthController(IJwtService jwtServices, IEmailService emailService, IUserService<User> userService, IOptions<ViThorAuthSettings> appSettings) : base(jwtServices, emailService, userService, appSettings)
+    {
+    }
+}
+```
+
 ### Email
 
 The email service configuration must also be done in appsettings:
