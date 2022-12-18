@@ -5,6 +5,27 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>ViThor.Auth</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Vitor Moschetta</Authors>
+    <Company>ViThor</Company>
+    <Copyright>© 2022 Vithor</Copyright>
+    <Description>A small package that adds Authentication and Authorization layer to your dotnet
+      application.</Description>
+    <RepositoryUrl>https://github.com/vitormoschetta/ViThor.Auth</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>authentication;authorization;jwt;token;refresh;refreshtoken;openid;email;dotnet;core;aspnet;aspnetcore</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="" />
+    <None Include="icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
