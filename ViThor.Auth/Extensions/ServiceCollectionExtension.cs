@@ -15,7 +15,7 @@ namespace ViThor.Auth.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static void BuildVithorSettings(this WebApplicationBuilder builder)
+        public static void BuildViThorSettings(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IJwtService, JwtService>();
