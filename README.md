@@ -1,4 +1,4 @@
-# ViThor.Auth
+# ViThor Auth
 
 A small package that adds Authentication and Authorization layer, based on Json Web Token (JWT), in your dotnet application.
 
@@ -81,3 +81,42 @@ The email service configuration must also be done in appsettings:
     }
 }
 ```
+
+
+## Sample
+
+The sample project is available in the repository. It is a simple dotnet web api project that uses the ViThor.Auth package.
+
+
+### Running the sample
+
+Run the following command to run the sample API:
+
+```bash
+dotnet run --project ./Vithor.Auth.Sample/ViThor.Auth.Sample.csproj
+```
+
+### Testing the sample
+
+#### Swagger
+
+The sample project has Swagger configured. To access it, run the API and access the following URL:
+
+```bash
+http://localhost:5000/swagger/index.html
+```
+
+#### Postman
+
+The example project has a Postman collection that can be used to test endpoints. To use it, import the collections from the `Postman` folder into Postman and run the requests.
+
+
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
