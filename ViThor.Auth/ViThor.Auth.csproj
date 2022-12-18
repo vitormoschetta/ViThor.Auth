@@ -10,7 +10,7 @@
     <Version>0.1.0</Version>
     <Authors>Vitor Moschetta</Authors>
     <Company>ViThor</Company>
-    <Copyright>© 2022 Vithor</Copyright>
+    <Copyright>© 2022 ViThor</Copyright>
     <Description>A small package that adds Authentication and Authorization layer to your dotnet
       application.</Description>
     <RepositoryUrl>https://github.com/vitormoschetta/ViThor.Auth</RepositoryUrl>
