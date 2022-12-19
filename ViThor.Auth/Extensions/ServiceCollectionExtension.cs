@@ -22,6 +22,11 @@ namespace ViThor.Auth.Extensions
             
             builder.Services.Configure<ViThorAuthSettings>(builder.Configuration);
 
+            var viThorAuthSettings = builder.Services.BuildServiceProvider()?.GetService<IOptions<ViThorAuthSettings>>()?.Value ?? throw new ArgumentNullException(nameof(ViThorAuthSettings));
+
+            if (viThorAuthSettings.JwtConfig == null)
+                throw new ArgumentNullException($"{nameof(ViThorAuthSettings.JwtConfig)} is null. Please check your appsettings.json file.");
+
             SwaggerConfig(builder.Services);
             AuthenticationConfig(builder.Services);
         }       

@@ -32,7 +32,10 @@ public class User : UserBase
 }
 ```
 
-Next, you need to create a class that implements the IUserService interface. Add to dependency injection from the `Program.cs` class:
+Next, you need to create a class that implements the IUserService interface.
+You can get a sample implementation in `Samples/Vithor.Auth.Sample/Serives/UserService.cs`.
+
+Add the class that implements the IUserService to the `Program.cs` dependency injection service:
     
 ```csharp
 builder.Services.AddScoped<IUserService<User>, UserService>();
@@ -75,9 +78,9 @@ public class AuthController : AuthControllerBase<User>
 }
 ```
 
-### Email
+### E-mail
 
-The email service configuration must also be done in appsettings:
+E-mail configuration is not required. That is, only if you are going to use the email sending service to validate the user registration, add the parameters below in appsettings:
 
 ```json
 {

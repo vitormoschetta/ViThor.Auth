@@ -20,14 +20,15 @@ namespace ViThor.Auth.Controllers
         private readonly IJwtService _jwtServices;
         private readonly IEmailService _emailService;
         private readonly IUserService<TUserBase> _userService;
-        private readonly IOptions<ViThorAuthSettings> _appSettings;
+        private readonly IOptions<ViThorAuthSettings> _viThorAuthSettings;
 
-        public AuthControllerBase(IJwtService jwtServices, IEmailService emailService, IUserService<TUserBase> userService, IOptions<ViThorAuthSettings> appSettings)
+        public AuthControllerBase(IJwtService jwtServices, IEmailService emailService, IUserService<TUserBase> userService, IOptions<ViThorAuthSettings> viThorAuthSettings)
         {
             _jwtServices = jwtServices;
             _emailService = emailService;
             _userService = userService;
-            _appSettings = appSettings;
+            _viThorAuthSettings = viThorAuthSettings;
+
         }
 
 
@@ -67,8 +68,11 @@ namespace ViThor.Auth.Controllers
             if (user.Password != passwordHash)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            if (!user.IsEmailVerified && _appSettings.Value.SmtpConfig.Enabled)
-                return BadRequest(new { message = "Email not verified" });
+            if (_viThorAuthSettings.Value?.SmtpConfig != null)
+            {
+                if (_viThorAuthSettings.Value.SmtpConfig.Enabled && !user.IsEmailVerified)
+                    return BadRequest(new { message = "Email not verified" });
+            }
 
             var claims = await _userService.GetClaim(user);
 
@@ -124,7 +128,7 @@ namespace ViThor.Auth.Controllers
         }
 
 
-        [HttpPost("email-verification/{id}")]
+        [HttpGet("email-verification/{id}")]
         public async Task<ContentResult> Confirm(Guid id)
         {
             var user = await _userService.GetById(id);
@@ -148,15 +152,18 @@ namespace ViThor.Auth.Controllers
 
         private async void SendEmailVerification(TUserBase user)
         {
-            if (_appSettings.Value.SmtpConfig.Enabled)
+            if (_viThorAuthSettings.Value?.SmtpConfig != null)
             {
-                var body = $@"
+                if (_viThorAuthSettings.Value.SmtpConfig.Enabled)
+                {
+                    var body = $@"
                     <h1>Welcome to our platform</h1>
                     <p>Email: {user}</p>
 
-                    <p>Click <a href='{_appSettings.Value.BaseAddress}/api/authenticate/email-verification/{user.Id}'>here</a> to validate your email</p>";
+                    <p>Click <a href='{_viThorAuthSettings.Value.BaseAddress}/api/authenticate/email-verification/{user.Id}'>here</a> to validate your email</p>";
 
-                await _emailService.SendEmail(user.Email, "Welcome", body);
+                    await _emailService.SendEmail(user.Email, "Welcome", body);
+                }
             }
         }
     }
