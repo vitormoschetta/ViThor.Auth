@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ViThor.Auth\ViThor.Auth.csproj" />
+    <ProjectReference Include="..\..\ViThor.Auth\ViThor.Auth.csproj" />
   </ItemGroup>
 
 </Project>

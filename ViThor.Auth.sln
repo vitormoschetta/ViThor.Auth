@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViThor.Auth", "ViThor.Auth\ViThor.Auth.csproj", "{6DA0B98E-415E-4F8E-9A36-0E4C22A15108}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViThor.Auth.Sample", "Vithor.Auth.Sample\ViThor.Auth.Sample.csproj", "{D435D477-B789-4795-BE83-81D2D58D9784}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{47779631-41B4-46DA-89D9-AC0A4176451E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViThor.Auth.Sample", "Samples\Vithor.Auth.Sample\ViThor.Auth.Sample.csproj", "{3904617A-90FD-4728-815B-4B2E7C6AB0A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +22,12 @@ Global
 		{6DA0B98E-415E-4F8E-9A36-0E4C22A15108}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DA0B98E-415E-4F8E-9A36-0E4C22A15108}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DA0B98E-415E-4F8E-9A36-0E4C22A15108}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D435D477-B789-4795-BE83-81D2D58D9784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D435D477-B789-4795-BE83-81D2D58D9784}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D435D477-B789-4795-BE83-81D2D58D9784}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D435D477-B789-4795-BE83-81D2D58D9784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3904617A-90FD-4728-815B-4B2E7C6AB0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3904617A-90FD-4728-815B-4B2E7C6AB0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3904617A-90FD-4728-815B-4B2E7C6AB0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3904617A-90FD-4728-815B-4B2E7C6AB0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3904617A-90FD-4728-815B-4B2E7C6AB0A9} = {47779631-41B4-46DA-89D9-AC0A4176451E}
 	EndGlobalSection
 EndGlobal

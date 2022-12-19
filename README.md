@@ -104,7 +104,7 @@ The sample project is available in the repository. It is a simple dotnet web api
 Run the following command to run the sample API:
 
 ```bash
-dotnet run --project ./Vithor.Auth.Sample/ViThor.Auth.Sample.csproj
+dotnet run --project ./Samples/Vithor.Auth.Sample/ViThor.Auth.Sample.csproj
 ```
 
 ### Testing the sample
