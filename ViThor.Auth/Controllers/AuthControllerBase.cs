@@ -33,7 +33,7 @@ namespace ViThor.Auth.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] CreateUserRequest<TUserBase> request)
+        public async Task<ActionResult<TUserBase>> Register([FromBody] CreateUserRequest<TUserBase> request)
         {
             var user = await _userService.GetByUsername(request.Username);
             if (user != null)
@@ -125,6 +125,26 @@ namespace ViThor.Auth.Controllers
                 RefreshToken = user.RefreshToken,
                 Token = token
             });
+        }
+
+
+        [HttpGet("current-user")]
+        public async Task<ActionResult<TUserBase>> CurrentUser()
+        {            
+            var username = User.Identity?.Name;
+
+            if (username == null)
+                return Unauthorized(new { message = "Invalid token: username not found" });
+
+            var user = await _userService.GetByUsername(username);
+            if (user == null)
+            {
+                user = await _userService.GetByEmail(username);
+                if (user == null)
+                    return Unauthorized(new { message = "Invalid token: user not found" });
+            }
+
+            return Ok(user);
         }
 
 

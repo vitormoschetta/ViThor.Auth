@@ -41,39 +41,19 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<ActionResult<User>> GetCurrentUser()
     {
-        // Como enriquecemos o contexto da requisição com o usuário, no AuthorizationFilter, podemos recuperar o usuário de duas formas:
-        // 1) Através do User.Identity.Name
-        // 2) Através do HttpContext.Items (Informações adicionais que podem ser adicionadas ao contexto da requisição ao utilizar um filtro de autorização)
+        var username = User.Identity?.Name;
 
-        // 1) Através do User.Identity.Name
-        var user = await GetCurrentUserByUserIdentity();
+        if (username == null)
+            return Unauthorized(new { message = "Invalid token: username not found" });
 
-        // 2) Através do HttpContext.Items
-        // var user = await GetCurrentUserByHttpContext();
-
+        var user = await _userService.GetByUsername(username);
         if (user == null)
-            return NotFound();
+        {
+            user = await _userService.GetByEmail(username);
+            if (user == null)
+                return Unauthorized(new { message = "Invalid token: user not found" });
+        }
 
         return Ok(user);
-    }
-
-
-    private Task<User?> GetCurrentUserByHttpContext()
-    {
-        var user = HttpContext.Items["user"] as User ?? throw new Exception("User not found in HttpContext.Items");
-        return Task.FromResult(user) as Task<User?>;
-    }
-
-
-    private async Task<User?> GetCurrentUserByUserIdentity()
-    {
-        var username = User.Identity?.Name ?? throw new Exception("User.Identity.Name is null");
-
-        // pegar valor de um claim específico
-        var document = User.Claims.FirstOrDefault(x => x.Type == "document")?.Value;
-        if (document != null)
-            Console.WriteLine($"Document: {document}");
-
-        return await _userService.GetByUsername(username);
     }
 }

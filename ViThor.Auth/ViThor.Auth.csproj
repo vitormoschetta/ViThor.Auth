@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <PackageId>ViThor.Auth</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Vitor Moschetta</Authors>
     <Company>ViThor</Company>
     <Copyright>© 2022 ViThor</Copyright>
