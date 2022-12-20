@@ -33,7 +33,7 @@ namespace ViThor.Auth.Controllers
 
 
         [HttpPost("register")]
-        public async Task<ActionResult<TUserBase>> Register([FromBody] CreateUserRequest<TUserBase> request)
+        public async Task<ActionResult<TUserBase>> Register([FromBody] CreateUserRequest request)
         {
             var user = await _userService.GetByUsername(request.Username);
             if (user != null)
@@ -43,7 +43,15 @@ namespace ViThor.Auth.Controllers
             byte[] salt = HashManager.GenerateSalt();
             var password = HashManager.GenerateHash(request.Password, salt);
 
-            user = await _userService.MapRequestToUser(request, refreshToken, salt, password) ?? throw new System.Exception("Error mapping request to user");
+            user = new TUserBase
+            {
+                Username = request.Username,
+                Email = request.Email,
+                Role = request.Role,
+                RefreshToken = refreshToken,
+                Salt = salt,
+                Password = password
+            };
             await _userService.Create(user);
 
             SendEmailVerification(user);
@@ -92,45 +100,52 @@ namespace ViThor.Auth.Controllers
         [HttpPost("refresh-token")]
         public async Task<ActionResult<LoginResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var principal = await _jwtServices.GetPrincipalFromExpiredToken(request.Token);
-            var username = principal.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized(new { message = "Invalid token: username not found" });
-
-            var user = await _userService.GetByUsername(username);
-            if (user == null)
+            try
             {
-                user = await _userService.GetByEmail(username);
+                var principal = await _jwtServices.GetPrincipalFromExpiredToken(request.Token);
+                var username = principal.Identity?.Name;
+
+                if (username == null)
+                    return Unauthorized(new { message = "Invalid token: username not found" });
+
+                var user = await _userService.GetByUsername(username);
                 if (user == null)
-                    return Unauthorized(new { message = "Invalid token: user not found" });
+                {
+                    user = await _userService.GetByEmail(username);
+                    if (user == null)
+                        return Unauthorized(new { message = "Invalid token: user not found" });
+                }
+
+                if (user.RefreshToken != request.RefreshToken)
+                    return Unauthorized(new { message = "Invalid token: refresh token not found" });
+
+                var claims = await _userService.GetClaim(user);
+                var token = await _jwtServices.GenerateJwtToken(claims);
+
+                var refreshToken = await _jwtServices.GenerateRefreshToken();
+
+                user.RefreshToken = refreshToken;
+                await _userService.Update(user);
+
+                return Ok(new LoginResponse
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Role = user.Role,
+                    RefreshToken = user.RefreshToken,
+                    Token = token
+                });
             }
-
-            if (user.RefreshToken != request.RefreshToken)
-                return Unauthorized(new { message = "Invalid token: refresh token not found" });
-
-            var claims = await _userService.GetClaim(user);
-            var token = await _jwtServices.GenerateJwtToken(claims);
-
-            var refreshToken = await _jwtServices.GenerateRefreshToken();
-
-            user.RefreshToken = refreshToken;
-            await _userService.Update(user);
-
-            return Ok(new LoginResponse
+            catch (Exception ex)
             {
-                Id = user.Id,
-                Email = user.Email,
-                Role = user.Role,
-                RefreshToken = user.RefreshToken,
-                Token = token
-            });
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
 
         [HttpGet("current-user")]
         public async Task<ActionResult<TUserBase>> CurrentUser()
-        {            
+        {
             var username = User.Identity?.Name;
 
             if (username == null)

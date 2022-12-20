@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
-using ViThor.Auth.Requests;
 using ViThor.Auth.Sample.Models;
 using ViThor.Auth.Services.User;
 using ViThor.Auth.Settings;
@@ -57,23 +56,7 @@ namespace ViThor.Auth.Sample.Services
 
             return Task.FromResult(claims);
         }
-
-        public Task<User?> MapRequestToUser(CreateUserRequest<User> request, string refrashToken, byte[] salt, string password)
-        {
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = request.Username,
-                Email = request.Email,
-                Password = password,
-                Salt = salt,
-                Role = request.Role,
-                RefreshToken = refrashToken
-            };
-
-            return Task.FromResult(user) as Task<User?>;
-        }
-
+       
         public Task Update(User user)
         {
             var index = _users.FindIndex(x => x.Id == user.Id);

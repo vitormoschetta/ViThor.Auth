@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ViThor.Auth.Requests
 {
     public class RefreshTokenRequest
