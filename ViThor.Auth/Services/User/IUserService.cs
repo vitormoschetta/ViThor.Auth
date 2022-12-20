@@ -15,7 +15,7 @@ namespace ViThor.Auth.Services.User
         Task<TUserBase?> GetById(Guid id);
         Task<TUserBase?> GetByUsername(string username);
         Task<TUserBase?> GetByEmail(string email);
-        Task<TUserBase?> MapRequestToUser(CreateUserRequest<TUserBase> request, string refrashToken, byte[] salt, string password);
+        //Task<TUserBase?> MapRequestToUser(CreateUserRequestBase<TUserBase> request, string refrashToken, byte[] salt, string password);
         Task<Claim[]> GetClaim(TUserBase user);
     }
 }

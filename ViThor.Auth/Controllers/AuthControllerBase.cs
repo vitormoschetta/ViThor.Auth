@@ -7,6 +7,7 @@ using ViThor.Auth.Requests;
 using ViThor.Auth.Responses;
 using ViThor.Auth.Services.Email;
 using ViThor.Auth.Services.Jwt;
+using ViThor.Auth.Services.Mapper;
 using ViThor.Auth.Services.User;
 using ViThor.Auth.Settings;
 using ViThor.Auth.Utils;
@@ -15,25 +16,30 @@ namespace ViThor.Auth.Controllers
 {
     [ApiController]
     [Route("api/authenticate")]
-    public class AuthControllerBase<TUserBase> : ControllerBase where TUserBase : UserBase, new()
+    public class AuthControllerBase<TUserBase, TCreateUserRequest> : ControllerBase
+                                                    where TUserBase : UserBase, new()
+                                                    where TCreateUserRequest : CreateUserRequestBase, new()
     {
         private readonly IJwtService _jwtServices;
         private readonly IEmailService _emailService;
         private readonly IUserService<TUserBase> _userService;
+        private readonly IMapperService<TUserBase, TCreateUserRequest> _mapper;
         private readonly IOptions<ViThorAuthSettings> _viThorAuthSettings;
 
-        public AuthControllerBase(IJwtService jwtServices, IEmailService emailService, IUserService<TUserBase> userService, IOptions<ViThorAuthSettings> viThorAuthSettings)
+        public AuthControllerBase(
+            IJwtService jwtServices, IEmailService emailService, IUserService<TUserBase> userService, IMapperService<TUserBase, TCreateUserRequest> mapper,
+            IOptions<ViThorAuthSettings> viThorAuthSettings)
         {
             _jwtServices = jwtServices;
             _emailService = emailService;
             _userService = userService;
+            _mapper = mapper;
             _viThorAuthSettings = viThorAuthSettings;
-
         }
 
 
         [HttpPost("register")]
-        public async Task<ActionResult<TUserBase>> Register([FromBody] CreateUserRequest<TUserBase> request)
+        public async Task<ActionResult<TUserBase>> Register([FromBody] TCreateUserRequest request)
         {
             var user = await _userService.GetByUsername(request.Username);
             if (user != null)
@@ -43,7 +49,7 @@ namespace ViThor.Auth.Controllers
             byte[] salt = HashManager.GenerateSalt();
             var password = HashManager.GenerateHash(request.Password, salt);
 
-            user = await _userService.MapRequestToUser(request, refreshToken, salt, password) ?? throw new System.Exception("Error mapping request to user");
+            user = _mapper.MapRequestToUser(request, refreshToken, salt, password);
             await _userService.Create(user);
 
             SendEmailVerification(user);
@@ -53,7 +59,7 @@ namespace ViThor.Auth.Controllers
 
 
         [HttpPost("login")]
-        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+        public virtual async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
             var user = await _userService.GetByUsername(request.Username);
             if (user == null)
@@ -130,7 +136,7 @@ namespace ViThor.Auth.Controllers
 
         [HttpGet("current-user")]
         public async Task<ActionResult<TUserBase>> CurrentUser()
-        {            
+        {
             var username = User.Identity?.Name;
 
             if (username == null)

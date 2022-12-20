@@ -18,8 +18,8 @@ namespace ViThor.Auth.Extensions
         public static void BuildViThorSettings(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped<IJwtService, JwtService>();
-            
+            builder.Services.AddScoped<IJwtService, JwtService>();                        
+
             builder.Services.Configure<ViThorAuthSettings>(builder.Configuration);
 
             var viThorAuthSettings = builder.Services.BuildServiceProvider()?.GetService<IOptions<ViThorAuthSettings>>()?.Value ?? throw new ArgumentNullException(nameof(ViThorAuthSettings));
@@ -29,7 +29,7 @@ namespace ViThor.Auth.Extensions
 
             SwaggerConfig(builder.Services);
             AuthenticationConfig(builder.Services);
-        }       
+        }
 
         private static void SwaggerConfig(IServiceCollection services)
         {
