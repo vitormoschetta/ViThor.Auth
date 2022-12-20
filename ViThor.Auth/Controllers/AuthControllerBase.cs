@@ -58,7 +58,7 @@ namespace ViThor.Auth.Controllers
             var user = await _userService.GetByUsername(request.Username);
             if (user == null)
             {
-                user = await _userService.GetByEmail(request.Email);
+                user = await _userService.GetByEmail(request.Username);
                 if (user == null)
                     return BadRequest("Invalid credentials");
             }

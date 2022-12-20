@@ -86,7 +86,7 @@ E-mail configuration is not required. That is, only if you are going to use the 
 {
     "BaseAddress": "http://localhost:5000",
     "SmtpConfig": {
-        "Enabled": false,
+        "Enabled": true,
         "Host": "smtp.gmail.com",
         "Port": 587,
         "UserName": "user@gmail.com",
