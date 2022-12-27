@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ViThor.Auth.Models;
-using ViThor.Auth.Requests;
 
 namespace ViThor.Auth.Services.User
 {

@@ -35,7 +35,7 @@ namespace ViThor.Auth.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new() { Title = "Vithor.Auth", Version = "v1" });
+                c.SwaggerDoc("v1", new() { Title = "ViThor.Auth", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"

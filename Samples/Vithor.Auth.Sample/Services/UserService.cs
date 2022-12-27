@@ -44,19 +44,21 @@ namespace ViThor.Auth.Sample.Services
 
         public Task<Claim[]> GetClaim(User user)
         {
+            var roles = user.Roles?.Select(x => x.Name)?.ToArray() ?? new string[0];
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, string.Join(",", roles)),
                 new Claim("iss", _appSettings.Value.JwtConfig.Issuer),
                 new Claim("aud", _appSettings.Value.JwtConfig.Audience),
-                new Claim("document", "123456789") // custom claim,
+                new Claim("document", "123456789") // custom claim example
             };
 
             return Task.FromResult(claims);
         }
-       
+
         public Task Update(User user)
         {
             var index = _users.FindIndex(x => x.Id == user.Id);

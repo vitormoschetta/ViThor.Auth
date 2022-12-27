@@ -47,7 +47,7 @@ namespace ViThor.Auth.Controllers
             {
                 Username = request.Username,
                 Email = request.Email,
-                Role = request.Role,
+                Roles = request.Roles,
                 RefreshToken = refreshToken,
                 Salt = salt,
                 Password = password
@@ -90,7 +90,7 @@ namespace ViThor.Auth.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                Role = user.Role,
+                Roles = user.Roles,
                 RefreshToken = user.RefreshToken,
                 Token = token
             });
@@ -131,7 +131,7 @@ namespace ViThor.Auth.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    Role = user.Role,
+                    Roles = user.Roles,
                     RefreshToken = user.RefreshToken,
                     Token = token
                 });
